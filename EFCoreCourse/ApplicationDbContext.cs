@@ -1,4 +1,5 @@
 ﻿using EFCoreCourse.Entities;
+using EFCoreCourse.Entities.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace EFCoreCourse
@@ -9,9 +10,9 @@ namespace EFCoreCourse
         {
             base.OnModelCreating(modelBuilder);
 
-            #region Gender Configuration
+            #region Genres Configuration
 
-            modelBuilder.Entity<Gender>().Property(prop => prop.Description)
+            modelBuilder.Entity<Genres>().Property(prop => prop.Description)
                 .HasMaxLength(150)
                 .IsRequired();
 
@@ -39,15 +40,65 @@ namespace EFCoreCourse
                 .HasMaxLength(150)
                 .IsRequired();
 
-            modelBuilder.Entity<MovieTheater>().Property(prop => prop.Price)
+            #endregion
+
+            #region Movie Configuration
+            modelBuilder.Entity<Movie>().Property(prop => prop.Title)
+                .HasMaxLength(150)
+                .IsRequired();
+
+            modelBuilder.Entity<Movie>().Property(prop => prop.ReleaseDate)
+                .HasColumnType("date");
+
+            modelBuilder.Entity<Movie>().Property(prop => prop.PosterUrl)
+                .HasMaxLength(500)
+                .IsUnicode(false); // Non-Unicode string (VARCHAR)
+            #endregion
+
+            #region MovieOffer Configuration
+
+            modelBuilder.Entity<MovieOffer>().Property(prop => prop.DiscountPercentage)
+                .HasPrecision(5, 2);
+
+            modelBuilder.Entity<MovieOffer>().Property(prop => prop.StartDate)
+                .HasColumnType("date");
+
+            modelBuilder.Entity<MovieOffer>().Property(prop => prop.EndDate)
+                .HasColumnType("date");
+
+
+            #endregion
+
+            #region MovieTheaterRoom Configuration
+
+            modelBuilder.Entity<MovieTheaterRoom>().Property(prop => prop.Price)
                 .HasPrecision(9, 2);
 
             #endregion
+
+            #region MoviesActors Configuration
+
+            modelBuilder.Entity<MoviesActors>().HasKey(prop => new { prop.MovieId, prop.ActorId });
+
+            modelBuilder.Entity<MoviesActors>().Property(prop => prop.Character)
+                .HasMaxLength(150);
+
+            #endregion
+
+
         }
 
-        public DbSet<Gender> Gender { get; set; }
+        #region Table Names
+
+        public DbSet<Genres> Genres { get; set; }
         public DbSet<Actors> Actors { get; set; }
         public DbSet<MovieTheater> MovieTheater { get; set; }
+        public DbSet<Movie> Movie { get; set; }
+        public DbSet<MovieOffer> MovieOffer { get; set; }
+        public DbSet<MovieTheaterRoom> MovieTheaterRoom { get; set; }
+        public DbSet<MoviesActors> MoviesActors { get; set; }
+
+        #endregion
 
     }
 }
