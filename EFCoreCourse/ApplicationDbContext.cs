@@ -1,90 +1,25 @@
 ﻿using EFCoreCourse.Entities;
 using EFCoreCourse.Entities.Enums;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection;
 
 namespace EFCoreCourse
 {
     public class ApplicationDbContext(DbContextOptions options): DbContext(options)
     {
+        // If I wanted to have configured certain properties by convention, I would do it here.
+        protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
+        {
+            configurationBuilder.Properties<DateTime>().HaveColumnType("date");
+        }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-            #region Genres Configuration
-
-            modelBuilder.Entity<Genres>().Property(prop => prop.Description)
-                .HasMaxLength(150)
-                .IsRequired();
-
-            #endregion
-
-            #region Actors Configuration
-
-            modelBuilder.Entity<Actors>().Property(prop => prop.Name)
-                .HasMaxLength(150)
-                .IsRequired();
-
-            modelBuilder.Entity<Actors>().Property(prop => prop.LastName)
-                .HasMaxLength(150)
-                .IsRequired();
-
-            modelBuilder.Entity<Actors>().Property(prop => prop.BirthDate)
-                .HasColumnType("date")
-                .HasDefaultValue(new DateTime(1900, 1, 1));
-
-            #endregion
-
-            #region MovieTheater Configuration
-
-            modelBuilder.Entity<MovieTheater>().Property(prop => prop.Name)
-                .HasMaxLength(150)
-                .IsRequired();
-
-            #endregion
-
-            #region Movie Configuration
-            modelBuilder.Entity<Movie>().Property(prop => prop.Title)
-                .HasMaxLength(150)
-                .IsRequired();
-
-            modelBuilder.Entity<Movie>().Property(prop => prop.ReleaseDate)
-                .HasColumnType("date");
-
-            modelBuilder.Entity<Movie>().Property(prop => prop.PosterUrl)
-                .HasMaxLength(500)
-                .IsUnicode(false); // Non-Unicode string (VARCHAR)
-            #endregion
-
-            #region MovieOffer Configuration
-
-            modelBuilder.Entity<MovieOffer>().Property(prop => prop.DiscountPercentage)
-                .HasPrecision(5, 2);
-
-            modelBuilder.Entity<MovieOffer>().Property(prop => prop.StartDate)
-                .HasColumnType("date");
-
-            modelBuilder.Entity<MovieOffer>().Property(prop => prop.EndDate)
-                .HasColumnType("date");
-
-
-            #endregion
-
-            #region MovieTheaterRoom Configuration
-
-            modelBuilder.Entity<MovieTheaterRoom>().Property(prop => prop.Price)
-                .HasPrecision(9, 2);
-
-            #endregion
-
-            #region MoviesActors Configuration
-
-            modelBuilder.Entity<MoviesActors>().HasKey(prop => new { prop.MovieId, prop.ActorId });
-
-            modelBuilder.Entity<MoviesActors>().Property(prop => prop.Character)
-                .HasMaxLength(150);
-
-            #endregion
-
+            // Apply all configurations from the current assembly
+            // Identify all classes that implement IEntityTypeConfiguration<T> and apply them here
+            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
         }
 
