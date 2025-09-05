@@ -1,4 +1,4 @@
-﻿using EFCoreCourse.Server.GenresCrud;
+﻿using EFCoreCourse.Server.Cruds;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 

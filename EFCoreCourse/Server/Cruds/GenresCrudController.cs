@@ -2,7 +2,7 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace EFCoreCourse.Server.GenresCrud
+namespace EFCoreCourse.Server.Cruds
 {
     public class GenresCrudController
     {

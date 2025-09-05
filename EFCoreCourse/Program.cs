@@ -34,6 +34,12 @@ builder.Services.AddSwaggerGen(c =>
     }
 );   
 
+// Replace this line:
+// builder.Services.AddAutoMapper(typeof(Program)); 
+
+// With this line:
+builder.Services.AddAutoMapper(cfg => { }, typeof(Program));
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

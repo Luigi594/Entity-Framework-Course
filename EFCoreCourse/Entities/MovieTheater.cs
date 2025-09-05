@@ -18,5 +18,17 @@ namespace EFCoreCourse.Entities
         public ICollection<MovieTheaterRoom> MovieTheaterRooms { get; set; }
 
         #endregion
+
+        #region MovieTheater DTOs
+        
+        public class MoviesTheaterDTO
+        {
+            public Guid Id { get; set; }
+            public string Name { get; set; }
+            public double Latitude { get; set; }
+            public double Longitude { get; set; }
+        }
+
+        #endregion
     }
 }
