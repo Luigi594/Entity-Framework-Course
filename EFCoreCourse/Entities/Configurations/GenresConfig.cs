@@ -4,9 +4,9 @@ using System.Reflection.Emit;
 
 namespace EFCoreCourse.Entities.Configurations
 {
-    public class GenresConfig : IEntityTypeConfiguration<Genres>
+    public class GenresConfig : IEntityTypeConfiguration<GenresDTO>
     {
-        public void Configure(EntityTypeBuilder<Genres> builder)
+        public void Configure(EntityTypeBuilder<GenresDTO> builder)
         {
             builder.Property(prop => prop.Description)
                 .HasMaxLength(150)

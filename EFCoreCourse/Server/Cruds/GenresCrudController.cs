@@ -8,15 +8,15 @@ namespace EFCoreCourse.Server.Cruds
     {
         public class GetGenres
         {
-            public class GetGenresQuery : IRequest<List<Genres>>
+            public class GetGenresQuery : IRequest<List<GenresDTO>>
             {
 
             }
-            public class Handler(ApplicationDbContext context) : IRequestHandler<GetGenresQuery, List<Genres>>
+            public class Handler(ApplicationDbContext context) : IRequestHandler<GetGenresQuery, List<GenresDTO>>
             {
                 private readonly ApplicationDbContext _context = context;
 
-                public async Task<List<Genres>> Handle(GetGenresQuery request, CancellationToken cancellationToken)
+                public async Task<List<GenresDTO>> Handle(GetGenresQuery request, CancellationToken cancellationToken)
                 {
                     return await _context.Genres
                         .AsNoTracking()
@@ -28,15 +28,15 @@ namespace EFCoreCourse.Server.Cruds
 
         public class GetGenresByDescription
         {
-            public class GetGenresByDescriptionQuery : IRequest<List<Genres>>
+            public class GetGenresByDescriptionQuery : IRequest<List<GenresDTO>>
             {
                 public string Description { get; set; }
             }
-            public class Handler(ApplicationDbContext context) : IRequestHandler<GetGenresByDescriptionQuery, List<Genres>>
+            public class Handler(ApplicationDbContext context) : IRequestHandler<GetGenresByDescriptionQuery, List<GenresDTO>>
             {
                 private readonly ApplicationDbContext _context = context;
 
-                public async Task<List<Genres>> Handle(GetGenresByDescriptionQuery request, CancellationToken cancellationToken)
+                public async Task<List<GenresDTO>> Handle(GetGenresByDescriptionQuery request, CancellationToken cancellationToken)
                 {
                     var resp = await _context.Genres
                         .Where(g => g.Description.Contains(request.Description))

@@ -9,13 +9,14 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers().AddJsonOptions(options =>
 {
     options.JsonSerializerOptions.PropertyNamingPolicy = null;
+    //options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
 });
 
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");  
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
-builder.Services.AddDbContext<ApplicationDbContext>(options => 
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString, sqlServer => sqlServer.UseNetTopologySuite())
 );
 
@@ -32,7 +33,7 @@ builder.Services.AddSwaggerGen(c =>
             Version = "v1"
         });
     }
-);   
+);
 
 // Replace this line:
 // builder.Services.AddAutoMapper(typeof(Program)); 

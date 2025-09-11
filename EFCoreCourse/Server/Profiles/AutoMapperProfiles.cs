@@ -1,11 +1,13 @@
 ﻿using AutoMapper;
 using EFCoreCourse.Entities;
 using static EFCoreCourse.Entities.Actors;
+using static EFCoreCourse.Entities.GenresDTO;
+using static EFCoreCourse.Entities.Movie;
 using static EFCoreCourse.Entities.MovieTheater;
 
 namespace EFCoreCourse.Server.Profiles
 {
-    public class AutoMapperProfiles: Profile
+    public class AutoMapperProfiles : Profile
     {
         public AutoMapperProfiles()
         {
@@ -15,6 +17,11 @@ namespace EFCoreCourse.Server.Profiles
 
             #endregion
 
+            #region Genre DTO
+
+            CreateMap<GenresDTO, GenreDTO>();
+
+            #endregion
 
             #region MovieTheater DTO
 
@@ -24,6 +31,13 @@ namespace EFCoreCourse.Server.Profiles
 
             #endregion
 
+            #region Movie DTO
+
+            CreateMap<Movie, MovieDTO>()
+                .ForMember(dto => dto.MoviesTheaters, entity => entity.MapFrom(prop => prop.MovieTheaterRooms.Select(x => x.MovieTheater)))
+                .ForMember(dto => dto.Actors, entity => entity.MapFrom(prop => prop.MoviesActors.Select(s => s.Actor)));
+
+            #endregion
         }
     }
 }

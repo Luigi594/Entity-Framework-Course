@@ -2,7 +2,6 @@
 using AutoMapper.QueryableExtensions;
 using EFCoreCourse.Utils;
 using MediatR;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using static EFCoreCourse.Entities.MovieTheater;
 
@@ -12,11 +11,11 @@ namespace EFCoreCourse.Server.Cruds
     {
         public class GetMoviesTheater
         {
-            public class GetMoviesTheaterQuery: IRequest<List<MoviesTheaterDTO>>
+            public class GetMoviesTheaterQuery : IRequest<List<MoviesTheaterDTO>>
             {
 
             }
-            public class Handler(ApplicationDbContext context, IMapper mapper): IRequestHandler<GetMoviesTheaterQuery, List<MoviesTheaterDTO>>
+            public class Handler(ApplicationDbContext context, IMapper mapper) : IRequestHandler<GetMoviesTheaterQuery, List<MoviesTheaterDTO>>
             {
                 private readonly ApplicationDbContext _context = context;
                 private readonly IMapper _mapper = mapper;
@@ -50,8 +49,11 @@ namespace EFCoreCourse.Server.Cruds
                     var geomemtryFactory = new GeometryFactory();
                     var userLocation = geomemtryFactory.GetGeometryFromLocation(request.Latitude, request.Longitude);
 
+                    var maximumDistanceInMeters = 0;
+
                     var moviesTheater = await _context.MovieTheater
                         .OrderBy(x => x.Location.Distance(userLocation))
+                        .Where(x => x.Location.IsWithinDistance(userLocation, maximumDistanceInMeters))
                         .ProjectTo<MoviesTheaterDTO>(_mapper.ConfigurationProvider)
                         .ToListAsync(cancellationToken);
 
