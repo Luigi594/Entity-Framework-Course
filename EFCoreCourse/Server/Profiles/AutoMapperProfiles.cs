@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using EFCoreCourse.Entities;
 using static EFCoreCourse.Entities.Actors;
-using static EFCoreCourse.Entities.GenresDTO;
+using static EFCoreCourse.Entities.Genres;
 using static EFCoreCourse.Entities.Movie;
 using static EFCoreCourse.Entities.MovieTheater;
 
@@ -19,7 +19,7 @@ namespace EFCoreCourse.Server.Profiles
 
             #region Genre DTO
 
-            CreateMap<GenresDTO, GenreDTO>();
+            CreateMap<Genres, GenreDTO>();
 
             #endregion
 
@@ -32,6 +32,8 @@ namespace EFCoreCourse.Server.Profiles
             #endregion
 
             #region Movie DTO
+
+            CreateMap<Movie, MovieDTOBase>();
 
             CreateMap<Movie, MovieDTO>()
                 .ForMember(dto => dto.MoviesTheaters, entity => entity.MapFrom(prop => prop.MovieTheaterRooms.Select(x => x.MovieTheater)))

@@ -1,6 +1,6 @@
 ﻿namespace EFCoreCourse.Entities
 {
-    public class GenresDTO
+    public class Genres
     {
         public Guid Id { get; set; }
         public string Description { get; set; }

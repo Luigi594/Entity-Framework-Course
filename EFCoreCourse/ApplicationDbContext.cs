@@ -25,7 +25,7 @@ namespace EFCoreCourse
 
         #region Table Names
 
-        public DbSet<GenresDTO> Genres { get; set; }
+        public DbSet<Genres> Genres { get; set; }
         public DbSet<Actors> Actors { get; set; }
         public DbSet<MovieTheater> MovieTheater { get; set; }
         public DbSet<Movie> Movie { get; set; }

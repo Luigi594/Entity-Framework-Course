@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace EFCoreCourse.Controllers
 {
     [ApiController]
-    [Route("Api/Actors")]
+    [Route("Api/Actors/[Action]")]
     public class ActorsController(IMediator mediator) : Controller
     {
         private readonly IMediator _mediator = mediator;

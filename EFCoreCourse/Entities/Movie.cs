@@ -17,7 +17,7 @@ namespace EFCoreCourse.Entities
 
         #region Navs
 
-        public ICollection<GenresDTO> Genres { get; set; }
+        public ICollection<Genres> Genres { get; set; }
         public ICollection<MovieTheaterRoom> MovieTheaterRooms { get; set; }
         public ICollection<MoviesActors> MoviesActors { get; set; }
 
@@ -25,12 +25,21 @@ namespace EFCoreCourse.Entities
 
         #region MovieDTOs
 
+        public class MovieDTOBase
+        {
+            public Guid Id { get; set; }
+            public string Title { get; set; }
+            public DateTime ReleaseDate { get; set; }
+            public bool IsOnDisplay { get; set; }
+            public string PosterUrl { get; set; }
+        }
+
         public class MovieDTO
         {
             public Guid Id { get; set; }
             public string Title { get; set; }
             public bool IsOnDisplay { get; set; }
-            public List<GenresDTO> Genres { get; set; }
+            public List<Genres.GenreDTO> Genres { get; set; }
             public List<MoviesTheaterDTO> MoviesTheaters { get; set; }
             public List<ActorsDTO> Actors { get; set; }
         }
