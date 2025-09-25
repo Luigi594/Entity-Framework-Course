@@ -17,11 +17,20 @@ namespace EFCoreCourse.Controllers
             return Ok(response);
         }
 
-        [HttpGet("GetGenresByDescription")]
+        [HttpGet]
         public async Task<ActionResult> GetGenresByDescription([FromQuery] GenresCrudController.GetGenresByDescription.GetGenresByDescriptionQuery query)
         {
             var response = await _mediator.Send(query);
             return Ok(response);
         }
+
+        // Biography, Horror, Comedy, Drama, Action, Romance
+        [HttpPost]
+        public async Task<ActionResult> CreateGenre([FromBody] GenresCrudController.CreateGenre.CreateGenreCommand command)
+        {
+            var response = await _mediator.Send(command);
+            return Ok(response);
+        }
+
     }
 }

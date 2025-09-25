@@ -1,4 +1,6 @@
-﻿namespace EFCoreCourse.Entities
+﻿using EFCoreCourse.Utils;
+
+namespace EFCoreCourse.Entities
 {
     public class Genres
     {
@@ -8,6 +10,21 @@
         #region Navs
 
         public ICollection<Movie> Movies { get; set; }
+
+        #endregion
+
+        #region Methods
+
+        public static Genres New(string description)
+        {
+            var genre = new Genres
+            {
+                Description = description,
+                Id = IdentityGenerator.GenerateNewIdentity()
+            };
+
+            return genre;
+        }
 
         #endregion
 

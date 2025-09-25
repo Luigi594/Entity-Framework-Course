@@ -17,7 +17,7 @@ namespace EFCoreCourse.Controllers
             return Ok(resp);
         }
 
-        [HttpGet("GetMoviesGroupedByIsOnDisplay")]
+        [HttpGet]
         public async Task<ActionResult> GetMoviesGroupedByIsOnDisplay([FromQuery] MoviesCrudController.GetMoviesGroupedByIsOnDisplay.GetMoviesGroupedByIsOnDisplayQuery query)
         {
             var resp = await _mediator.Send(query);

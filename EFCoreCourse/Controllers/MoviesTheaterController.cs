@@ -17,7 +17,7 @@ namespace EFCoreCourse.Controllers
             return Ok(response);
         }
 
-        [HttpGet("GetMoviesTheaterNearBy")]
+        [HttpGet]
         public async Task<ActionResult> GetMoviesTheaterNearBy([FromQuery] MoviesTheaterCrudController.GetMoviesTheaterNearBy.GetMoviesTheaterNearByQuery query)
         {
             var response = await _mediator.Send(query);

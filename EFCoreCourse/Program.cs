@@ -1,5 +1,9 @@
 using EFCoreCourse;
+using EFCoreCourse.Server.Utilities;
+using FluentValidation;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +26,12 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 // MediatR
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<Program>());
+
+// FluentValidation (check all validator's assembly)
+builder.Services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+
+// Pipeline Behavior for FluentValidation
+builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 
 // Swagger
 builder.Services.AddEndpointsApiExplorer();
