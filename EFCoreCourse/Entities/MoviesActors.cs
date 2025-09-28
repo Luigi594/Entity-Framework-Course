@@ -12,5 +12,20 @@
         public string Character { get; set; }
 
         #endregion
+
+        #region Methods
+
+        public static MoviesActors Create(Guid movieId, Guid actorId, string character, int order)
+        {   
+            return new MoviesActors
+            {
+                MovieId = movieId,
+                ActorId = actorId,
+                Character = character,
+                Order = order
+            };
+        }
+
+        #endregion
     }
 }

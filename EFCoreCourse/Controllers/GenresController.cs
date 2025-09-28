@@ -32,5 +32,12 @@ namespace EFCoreCourse.Controllers
             return Ok(response);
         }
 
+        [HttpPost]
+        public async Task<ActionResult> CreateGenresByList([FromBody] GenresCrudController.CreateGenresByList.CreateGenresByListCommand command)
+        {
+            var response = await _mediator.Send(command);
+            return Ok(response);
+        }
+
     }
 }

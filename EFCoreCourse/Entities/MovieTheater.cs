@@ -1,4 +1,5 @@
-﻿using NetTopologySuite.Geometries;
+﻿using EFCoreCourse.Utils;
+using NetTopologySuite.Geometries;
 
 namespace EFCoreCourse.Entities
 {
@@ -17,10 +18,34 @@ namespace EFCoreCourse.Entities
 
         public ICollection<MovieTheaterRoom> MovieTheaterRooms { get; set; }
 
+        public MovieTheater()
+        {
+            MovieTheaterRooms = new HashSet<MovieTheaterRoom>();
+        }
+
+        #endregion
+
+        #region Methods
+
+        public static MovieTheater Create(string name, double latitude, 
+            double longitude, List<MovieTheaterRoom> movieTheaterRooms)
+        {
+            var geometryFactory = new Utils.GeometryFactory();
+            var location = geometryFactory.GetGeometryFromLocation(latitude, longitude);
+
+            return new MovieTheater
+            {
+                Id = IdentityGenerator.GenerateNewIdentity(),
+                Name = name,
+                Location = location,
+                MovieTheaterRooms = movieTheaterRooms
+            };
+        }
+
         #endregion
 
         #region MovieTheater DTOs
-        
+
         public class MoviesTheaterDTO
         {
             public Guid Id { get; set; }

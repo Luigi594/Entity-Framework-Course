@@ -1,6 +1,9 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using EFCoreCourse.Entities;
+using EFCoreCourse.Server.Utilities;
 using MediatR;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using static EFCoreCourse.Entities.Actors;
 using static EFCoreCourse.Entities.Movie;
@@ -111,6 +114,109 @@ namespace EFCoreCourse.Server.Cruds
 
                     return groupedMovies;
 
+                }
+            }
+        }
+
+        public class CreateNewMovie
+        {
+            public class CreateNewMovieCommand: IRequest<ActionResult<EndpointResponses.ResponseWithSimpleMessage>>
+            {
+                public string Title { get; set; }
+                public DateTime ReleaseDate { get; set; }
+                public string PosterUrl { get; set; }
+                public List<Guid> GenresIds { get; set; }   
+                public List<Guid> MovieTheaterRoomsIds { get; set; }
+                public List<ActorVm> Actors { get; set; }
+
+                public class ActorVm
+                {
+                    public Guid Id { get; set; }
+                    public string Character { get; set; }
+                }
+            }
+
+            public class CreateNewMovieCommandHandler(ApplicationDbContext context, IMapper mapper)
+                : IRequestHandler<CreateNewMovieCommand, ActionResult<EndpointResponses.ResponseWithSimpleMessage>>
+            {
+                private readonly ApplicationDbContext _context = context;
+                private readonly IMapper _mapper = mapper;
+
+                public async Task<ActionResult<EndpointResponses.ResponseWithSimpleMessage>> Handle(CreateNewMovieCommand command, CancellationToken cancellationToken)
+                {
+                    var genresIds= command.GenresIds.Distinct().ToList();
+                    var movieTheaterRoomsIds = command.MovieTheaterRoomsIds.Distinct().ToList();
+
+                    #region Genres and MovieTheaterRooms Validation
+                    var genres = await _context.Genres
+                        .Where(x => genresIds.Contains(x.Id))
+                        .ToListAsync(cancellationToken);
+                    
+                    for (int i = 0; i < genres.Count; i++)
+                    {
+                        var genre = genres.ElementAt(i);
+                        var genreExists = genres.Where(x => x.Id == genre.Id).FirstOrDefault() 
+                            ?? throw new Exception($"The genre with id {genre.Id} does not exist.");
+                    }
+
+                    var movieTheaterRooms = await _context.MovieTheaterRoom
+                        .Where(x => movieTheaterRoomsIds.Contains(x.Id))
+                        .ToListAsync(cancellationToken);
+
+                    for (int i = 0; i < movieTheaterRooms.Count; i++)
+                    {
+                        var movieTheaterRoom = movieTheaterRooms.ElementAt(i);  
+                        var movieTheaterRoomExists = movieTheaterRooms
+                            .Where(x => x.Id == movieTheaterRoom.Id)
+                            .FirstOrDefault() 
+                            ?? throw new Exception($"The movie theater room with id {movieTheaterRoom.Id} does not exist.");
+                    }
+
+                    #endregion
+
+                    var message = "";
+
+                    if(command.Actors != null && command.Actors.Count > 0)
+                    {
+                        var actorsIds = command.Actors.Select(x => x.Id).Distinct().ToList();
+                        var actors = await _context.Actors
+                            .Where(x => actorsIds.Contains(x.Id))
+                            .ProjectTo<ActorsDTO>(_mapper.ConfigurationProvider)
+                            .ToListAsync(cancellationToken);
+
+                        var existingMovie = await _context.Movie
+                            .FirstOrDefaultAsync(x => x.Title == command.Title, cancellationToken);
+
+                        if (existingMovie != null)
+                            throw new Exception($"A movie with the title {command.Title} already exists.");
+
+                        var newMovie = Movie.Create(command.Title, command.ReleaseDate, true, command.PosterUrl);
+
+                        var moviesActors = new List<MoviesActors>();
+                        int order = 1;
+
+                        foreach(var actorVm in command.Actors)
+                        {
+                            var actor = actors
+                                .Where(x => x.Id == actorVm.Id).FirstOrDefault() 
+                                ?? throw new Exception($"The actor with id {actorVm.Id} does not exist.");
+
+                            var newMovieActor = MoviesActors.Create(newMovie.Id, actor.Id, actorVm.Character, order++);
+                            moviesActors.Add(newMovieActor);
+                        }
+
+                        newMovie.MoviesActors = moviesActors;
+
+                        genres.ForEach(genre => newMovie.Genres.Add(genre));
+                        movieTheaterRooms.ForEach(room => newMovie.MovieTheaterRooms.Add(room));
+
+                        await _context.Movie.AddAsync(newMovie, cancellationToken);
+                        await _context.SaveChangesAsync(cancellationToken);
+
+                        message = $"The movie {newMovie.Title} has been created successfully."; 
+                    }
+
+                    return EndpointResponses.ResponseWithSimpleMessage.Create(message);
                 }
             }
         }

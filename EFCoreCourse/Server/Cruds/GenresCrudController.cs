@@ -3,6 +3,7 @@ using AutoMapper.QueryableExtensions;
 using EFCoreCourse.Entities;
 using FluentValidation;
 using MediatR;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace EFCoreCourse.Server.Cruds
@@ -65,7 +66,7 @@ namespace EFCoreCourse.Server.Cruds
 
         public class CreateGenre
         {
-            public class CreateGenreCommand: IRequest<Response>
+            public class CreateGenreCommand: IRequest<ActionResult<Response>>
             {
                 public string Description { get; set; }
             }
@@ -95,17 +96,88 @@ namespace EFCoreCourse.Server.Cruds
                 }
             }
 
-            public class CreateGenreCommandHandler(ApplicationDbContext context): IRequestHandler<CreateGenreCommand, Response>
+            public class CreateGenreCommandHandler(ApplicationDbContext context)
+                : IRequestHandler<CreateGenreCommand, ActionResult<Response>>
             {
                 private readonly ApplicationDbContext _context = context;
 
-                public async Task<Response> Handle(CreateGenreCommand command, CancellationToken cancellationToken)
+                public async Task<ActionResult<Response>> Handle(CreateGenreCommand command, CancellationToken cancellationToken)
                 {
+                    var genreExists = await _context.Genres
+                        .Where(x => x.Description == command.Description)
+                        .Select(x=>x.Description)
+                        .ToListAsync(cancellationToken);
+
+                    if (genreExists.Count > 0)
+                    {
+                        for (int i = 0; i < genreExists.Count; i++)
+                        {
+                            var genre = genreExists.ElementAt(i);
+                            if (genre == command.Description)
+                            {
+                                throw new Exception($"The genre with the description '{command.Description}' already exists.");
+                            }
+                        }
+                    }
+
                     var newGenre = Genres.New(command.Description);
                     await _context.Genres.AddAsync(newGenre, cancellationToken);
                     await _context.SaveChangesAsync(cancellationToken);
 
                     return Response.New(newGenre.Id, newGenre.Description);
+                }
+            }
+        }
+
+        public class CreateGenresByList
+        {
+            public class CreateGenresByListCommand : IRequest<ActionResult<Response>>
+            {
+                public List<string> Description { get; set; }
+            }
+
+            public class Response
+            {
+                public string Message { get; set; }
+
+                public static Response New(string message)
+                {
+                    return new Response
+                    {
+                        Message = message
+                    };
+                }
+            }
+
+            public class CreateGenreBylistCommandHandler(ApplicationDbContext context) 
+                : IRequestHandler<CreateGenresByListCommand, ActionResult<Response>>
+            {
+                private readonly ApplicationDbContext _context = context;
+
+                public async Task<ActionResult<Response>> Handle(CreateGenresByListCommand command, CancellationToken cancellationToken)
+                {
+                    var existingGenres = await _context.Genres
+                        .Where(g => command.Description.Contains(g.Description))
+                        .Select(g => g.Description)
+                        .ToListAsync(cancellationToken);
+
+                    if(existingGenres.Count > 0)
+                    {
+                        var existingGenresList = string.Join(", ", existingGenres);
+                        throw new Exception($"The following genres already exist: {existingGenresList}");
+                    }
+
+                    var newGenres = command.Description.Distinct().ToList();
+
+                    foreach(var genre in newGenres)
+                    {
+                        var newGenre = Genres.New(genre);
+                        await _context.Genres.AddAsync(newGenre, cancellationToken);
+                    }
+
+                    await _context.SaveChangesAsync(cancellationToken);
+
+                    return Response.New("All genres created succesfully!");
                 }
             }
         }

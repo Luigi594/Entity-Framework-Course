@@ -1,4 +1,6 @@
-﻿namespace EFCoreCourse.Entities
+﻿using EFCoreCourse.Utils;
+
+namespace EFCoreCourse.Entities
 {
     public class Actors
     {
@@ -17,8 +19,28 @@
 
         public ICollection<MoviesActors> MoviesActors { get; set; }
 
+        public Actors()
+        {
+            MoviesActors = new HashSet<MoviesActors>();
+        }
+
         #endregion
 
+        #region Methods
+
+        public static Actors Create(string name, string lastName, string biography, DateTime birthDate)
+        {
+            return new Actors
+            {
+                Id = IdentityGenerator.GenerateNewIdentity(),
+                Name = name,
+                LastName = lastName,
+                Biography = biography,
+                BirthDate = birthDate
+            };
+        }
+
+        #endregion
 
         #region Actors DTOs
 

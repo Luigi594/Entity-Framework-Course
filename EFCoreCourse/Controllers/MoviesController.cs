@@ -1,4 +1,5 @@
 ﻿using EFCoreCourse.Server.Cruds;
+using EFCoreCourse.Server.Utilities;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -21,6 +22,13 @@ namespace EFCoreCourse.Controllers
         public async Task<ActionResult> GetMoviesGroupedByIsOnDisplay([FromQuery] MoviesCrudController.GetMoviesGroupedByIsOnDisplay.GetMoviesGroupedByIsOnDisplayQuery query)
         {
             var resp = await _mediator.Send(query);
+            return Ok(resp);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<EndpointResponses.ResponseWithSimpleMessage>> CreateNewMovie([FromBody] MoviesCrudController.CreateNewMovie.CreateNewMovieCommand command)
+        {
+            var resp = await _mediator.Send(command);
             return Ok(resp);
         }
     }

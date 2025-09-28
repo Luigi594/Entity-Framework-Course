@@ -1,4 +1,5 @@
-﻿using static EFCoreCourse.Entities.Actors;
+﻿using EFCoreCourse.Utils;
+using static EFCoreCourse.Entities.Actors;
 using static EFCoreCourse.Entities.MovieTheater;
 
 namespace EFCoreCourse.Entities
@@ -20,6 +21,32 @@ namespace EFCoreCourse.Entities
         public ICollection<Genres> Genres { get; set; }
         public ICollection<MovieTheaterRoom> MovieTheaterRooms { get; set; }
         public ICollection<MoviesActors> MoviesActors { get; set; }
+
+        public Movie()
+        {
+            Genres = new HashSet<Genres>();
+            MovieTheaterRooms = new HashSet<MovieTheaterRoom>();
+            MoviesActors = new HashSet<MoviesActors>();
+        }
+
+        #endregion
+
+        #region Methods
+
+        public static Movie Create(string title, DateTime releaseDate, bool isOnDisplay,
+            string posterUrl)
+        {
+            var movie = new Movie
+            {
+                Id = IdentityGenerator.GenerateNewIdentity(),
+                Title = title,
+                ReleaseDate = releaseDate,
+                IsOnDisplay = isOnDisplay,
+                PosterUrl = posterUrl,
+            };
+
+            return movie;
+        }
 
         #endregion
 
