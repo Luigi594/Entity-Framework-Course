@@ -236,10 +236,8 @@ namespace EFCoreCourse.Server.Cruds
                 public async Task<ActionResult<EndpointResponses.ResponseWithSimpleMessage>> Handle(UpdateMovieTheatherCommand command, CancellationToken cancellationToken)
                 {
                     var movieTheater = await _context.MovieTheater.Include(x => x.MovieTheaterRooms).Include(x => x.MovieOffer)
-                        .FirstOrDefaultAsync(x => x.Id == command.Id, cancellationToken);
-
-                    if (movieTheater is null)
-                        throw new Exception($"Movie Theather with Id: {command.Id} does not exists.");
+                        .FirstOrDefaultAsync(x => x.Id == command.Id, cancellationToken)
+                        ?? throw new Exception($"Movie Theather with Id: {command.Id} does not exists.");
 
                     var response = "";
 
