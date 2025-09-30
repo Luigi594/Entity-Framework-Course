@@ -4,7 +4,7 @@ using static EFCoreCourse.Entities.MovieTheater;
 
 namespace EFCoreCourse.Entities
 {
-    public class Movie
+    public class Movie: Entity
     {
         #region Properties
 

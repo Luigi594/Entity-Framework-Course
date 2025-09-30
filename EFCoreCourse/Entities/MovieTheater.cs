@@ -3,7 +3,7 @@ using NetTopologySuite.Geometries;
 
 namespace EFCoreCourse.Entities
 {
-    public class MovieTheater
+    public class MovieTheater: Entity
     {
         #region Properties
 

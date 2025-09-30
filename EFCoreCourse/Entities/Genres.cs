@@ -2,7 +2,7 @@
 
 namespace EFCoreCourse.Entities
 {
-    public class Genres
+    public class Genres: Entity
     {
         public Guid Id { get; set; }
         public string Description { get; set; }
@@ -10,6 +10,11 @@ namespace EFCoreCourse.Entities
         #region Navs
 
         public ICollection<Movie> Movies { get; set; }
+
+        public Genres()
+        {
+            Movies = new HashSet<Movie>();
+        }
 
         #endregion
 

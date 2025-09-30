@@ -3,7 +3,7 @@ using EFCoreCourse.Utils;
 
 namespace EFCoreCourse.Entities
 {
-    public class MovieTheaterRoom
+    public class MovieTheaterRoom: Entity
     {
         #region Properties
 

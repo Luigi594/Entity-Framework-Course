@@ -1,6 +1,6 @@
 ﻿using EFCoreCourse.Entities;
-using EFCoreCourse.Entities.Enums;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 using System.Reflection;
 
 namespace EFCoreCourse
@@ -11,16 +11,6 @@ namespace EFCoreCourse
         protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
         {
             configurationBuilder.Properties<DateTime>().HaveColumnType("date");
-        }
-
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            base.OnModelCreating(modelBuilder);
-
-            // Apply all configurations from the current assembly
-            // Identify all classes that implement IEntityTypeConfiguration<T> and apply them here
-            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-
         }
 
         #region Table Names
@@ -35,5 +25,36 @@ namespace EFCoreCourse
 
         #endregion
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            // Global Query Filter for Soft Delete
+            foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+            {
+                // If the entity inherits from our base class "Entity"  
+                if (typeof(Entity).IsAssignableFrom(entityType.ClrType))
+                {
+                    // Create the parameter for the lambda expression (e.g., "e") 
+                    // of the correct type (e.g., Actors, Genres, etc.) 
+                    var parameter = Expression.Parameter(entityType.ClrType, "e");
+
+                    //   (ej: e.IsSoftDeleted)  
+                    var property = Expression.Property(parameter, nameof(Entity.IsSoftDeleted));
+
+                    // Creates the body of the expression, which is the negation: !e.IsSoftDeleted
+                    var body = Expression.Not(property);
+
+                    // Create the lambda expression: e => !e.IsSoftDeleted
+                    var lambda = Expression.Lambda(body, parameter);
+                    modelBuilder.Entity(entityType.ClrType).HasQueryFilter(lambda);
+                }
+            }
+
+            // Apply all configurations from the current assembly
+            // Identify all classes that implement IEntityTypeConfiguration<T> and apply them here
+            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+
+        }
     }
 }

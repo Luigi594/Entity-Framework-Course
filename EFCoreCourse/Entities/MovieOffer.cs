@@ -2,7 +2,7 @@
 
 namespace EFCoreCourse.Entities
 {
-    public class MovieOffer
+    public class MovieOffer: Entity
     {
         #region Properties
 

@@ -1,6 +1,6 @@
 ﻿namespace EFCoreCourse.Entities
 {
-    public class MoviesActors
+    public class MoviesActors: Entity
     {
         #region Properties
 
