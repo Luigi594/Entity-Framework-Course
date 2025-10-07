@@ -76,19 +76,6 @@ namespace EFCoreCourse.Server.Cruds
                 public double Longitude { get; set; }
                 public MovieOfferVm MovieOffer { get; set; }
                 public List<MovieTheaterRoomVm> MovieTheaterRooms { get; set; }
-
-                public class MovieOfferVm
-                {
-                    public decimal DiscountPercentage { get; set; }
-                    public DateTime StartDate { get; set; }
-                    public DateTime EndDate { get; set; }
-                }
-
-                public class MovieTheaterRoomVm
-                {
-                    public decimal Price { get; set; }
-                    public MovieTheaterRoomType MovieTheaterRoomType { get; set; }
-                }
             }
 
             public class Validator : AbstractValidator<CreateMovieTheatherCommand>
@@ -197,20 +184,6 @@ namespace EFCoreCourse.Server.Cruds
                 public double Longitude { get; set; }
                 public MovieOfferVm MovieOffer { get; set; }
                 public List<MovieTheaterRoomVm> MovieTheaterRooms { get; set; }
-
-                public class MovieOfferVm
-                {
-                    public decimal DiscountPercentage { get; set; }
-                    public DateTime StartDate { get; set; }
-                    public DateTime EndDate { get; set; }
-                }
-
-                public class MovieTheaterRoomVm
-                {
-                    public Guid Id { get; set; }
-                    public decimal Price { get; set; }
-                    public MovieTheaterRoomType MovieTheaterRoomType { get; set; }
-                }
             }
 
             public class Validator : AbstractValidator<UpdateMovieTheatherCommand>
@@ -309,5 +282,24 @@ namespace EFCoreCourse.Server.Cruds
                 }
             }
         }
+
+
+        #region DTOs Just for MoviesTheaterCrudController and quick solution
+
+        public class MovieOfferVm
+        {
+            public decimal DiscountPercentage { get; set; }
+            public DateTime StartDate { get; set; }
+            public DateTime EndDate { get; set; }
+        }
+
+        public class MovieTheaterRoomVm
+        {
+            public Guid Id { get; set; }
+            public decimal Price { get; set; }
+            public MovieTheaterRoomType MovieTheaterRoomType { get; set; }
+        }
+
+        #endregion
     }
 }

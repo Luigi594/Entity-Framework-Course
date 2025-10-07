@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using EFCoreCourse.Utils;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System.Reflection.Emit;
 
@@ -10,6 +11,9 @@ namespace EFCoreCourse.Entities.Configurations
         {
             builder.Property(prop => prop.Price)
                 .HasPrecision(9, 2);
+
+            builder.Property(x => x.Currency)
+                .HasConversion<CurrencyConverter>();
         }
     }
 }

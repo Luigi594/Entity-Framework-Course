@@ -11,6 +11,8 @@ namespace EFCoreCourse.Entities.Configurations
             builder.Property(prop => prop.Description)
                 .HasMaxLength(150)
                 .IsRequired();
+
+            builder.HasIndex(x=>x.Description).IsUnique().HasFilter("IsSoftDeleted = 'false'");
         }
     }
 }

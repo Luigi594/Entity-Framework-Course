@@ -19,6 +19,9 @@ namespace EFCoreCourse.Entities.Configurations
             builder.Property(prop => prop.BirthDate)
                 .HasColumnType("date")
                 .HasDefaultValue(new DateTime(1900, 1, 1));
+
+            // Do not map the Age property to any column in the database
+            builder.Ignore(x => x.Age);
         }
     }
 }

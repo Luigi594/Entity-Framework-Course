@@ -12,6 +12,7 @@ namespace EFCoreCourse.Entities
         public MovieTheater MovieTheater { get; set; }
         public decimal Price { get; set; }
         public MovieTheaterRoomType MovieTheaterRoomType { get; set; }
+        public Currency Currency { get; set; }
 
         #endregion
 

@@ -12,6 +12,21 @@ namespace EFCoreCourse.Entities
         public string Biography { get; set; }
         public DateTime BirthDate { get; set; }
 
+        // This property is not mapped to the database, it's a calculated field.
+        public int? Age {
+            get
+            {
+                if (BirthDate == DateTime.MinValue) return null;
+
+                var today = DateTime.Today;
+                var age = today.Year - BirthDate.Year;
+
+                // If the birthday hasn't occurred yet this year, subtract one from age.
+                if (BirthDate.Date > today.AddYears(-age)) age--;
+
+                return age;
+            }
+        }
         #endregion
 
 
