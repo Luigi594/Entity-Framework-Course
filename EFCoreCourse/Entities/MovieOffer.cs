@@ -28,8 +28,21 @@ namespace EFCoreCourse.Entities
                 Id = IdentityGenerator.GenerateNewIdentity(),
                 DiscountPercentage = discountPercentage,
                 StartDate = startDate,
-                EndDate = endDate
+                EndDate = endDate,
+                CreatedAt = DateTime.Now
             };
+        }
+
+        #endregion
+
+        #region MovieOfferDTOs
+
+        public class Vm
+        {
+            public Guid Id { get; set; }
+            public decimal DiscountPercentage { get; set; }
+            public DateTime StartDate { get; set; }
+            public DateTime EndDate { get; set; }
         }
 
         #endregion

@@ -43,6 +43,7 @@ namespace EFCoreCourse.Entities
                 ReleaseDate = releaseDate,
                 IsOnDisplay = isOnDisplay,
                 PosterUrl = posterUrl,
+                CreatedAt = DateTime.Now
             };
 
             return movie;

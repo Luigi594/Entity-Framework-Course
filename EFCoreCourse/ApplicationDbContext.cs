@@ -48,6 +48,17 @@ namespace EFCoreCourse
                     // Create the lambda expression: e => !e.IsSoftDeleted
                     var lambda = Expression.Lambda(body, parameter);
                     modelBuilder.Entity(entityType.ClrType).HasQueryFilter(lambda);
+
+                    // Configure string properties that contain "Url" in their name
+                    foreach (var prop in entityType.GetProperties())
+                    {
+                        if(prop.ClrType == typeof(string) &&
+                            prop.Name.Contains("Url", StringComparison.CurrentCultureIgnoreCase))
+                        {
+                            prop.SetIsUnicode(false);
+                            prop.SetMaxLength(500);
+                        }
+                    }
                 }
             }
 

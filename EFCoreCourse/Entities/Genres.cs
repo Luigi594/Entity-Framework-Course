@@ -24,8 +24,9 @@ namespace EFCoreCourse.Entities
         {
             var genre = new Genres
             {
+                Id = IdentityGenerator.GenerateNewIdentity(),
                 Description = description,
-                Id = IdentityGenerator.GenerateNewIdentity()
+                CreatedAt = DateTime.Now
             };
 
             return genre;

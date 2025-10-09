@@ -38,7 +38,8 @@ namespace EFCoreCourse.Entities
                 Id = IdentityGenerator.GenerateNewIdentity(),
                 Name = name,
                 Location = location,
-                MovieTheaterRooms = movieTheaterRooms
+                MovieTheaterRooms = movieTheaterRooms,
+                CreatedAt = DateTime.Now
             };
         }
 

@@ -42,8 +42,8 @@ namespace EFCoreCourse.Server.Cruds
                 public string Name { get; set; }
                 public string LastName { get; set; }
                 public string Biography { get; set; }
-
                 public DateTime BirthDate { get; set; }
+                public string PictureUrl { get; set; }
             }
 
             public class Validator : AbstractValidator<CreateActorCommand>
@@ -74,7 +74,7 @@ namespace EFCoreCourse.Server.Cruds
                     if(existingActor != null)
                         return EndpointResponses.ResponseWithSimpleMessage.Create($"The actor {command.Name} {command.LastName} already exists.");
 
-                    var newActor = Actors.Create(command.Name, command.LastName, command.Biography, command.BirthDate);
+                    var newActor = Actors.Create(command.Name, command.LastName, command.Biography, command.BirthDate, command.PictureUrl);
                     await _context.Actors.AddAsync(newActor, cancellationToken);
                     await _context.SaveChangesAsync(cancellationToken);
 

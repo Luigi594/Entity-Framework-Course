@@ -22,7 +22,8 @@
                 MovieId = movieId,
                 ActorId = actorId,
                 Character = character,
-                Order = order
+                Order = order,
+                CreatedAt = DateTime.Now
             };
         }
 

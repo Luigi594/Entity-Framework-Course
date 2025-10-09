@@ -11,6 +11,7 @@ namespace EFCoreCourse.Entities
         public string LastName { get; set; }
         public string Biography { get; set; }
         public DateTime BirthDate { get; set; }
+        public string PictureUrl { get; set; }
 
         // This property is not mapped to the database, it's a calculated field.
         public int? Age {
@@ -43,7 +44,7 @@ namespace EFCoreCourse.Entities
 
         #region Methods
 
-        public static Actors Create(string name, string lastName, string biography, DateTime birthDate)
+        public static Actors Create(string name, string lastName, string biography, DateTime birthDate, string pictureUrl)
         {
             return new Actors
             {
@@ -51,7 +52,9 @@ namespace EFCoreCourse.Entities
                 Name = name,
                 LastName = lastName,
                 Biography = biography,
-                BirthDate = birthDate
+                BirthDate = birthDate,
+                PictureUrl = pictureUrl,
+                CreatedAt = DateTime.Now,
             };
         }
 
