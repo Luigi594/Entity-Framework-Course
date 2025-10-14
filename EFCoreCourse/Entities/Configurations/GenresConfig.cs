@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System.Reflection.Emit;
 
 namespace EFCoreCourse.Entities.Configurations
 {
@@ -12,7 +11,7 @@ namespace EFCoreCourse.Entities.Configurations
                 .HasMaxLength(150)
                 .IsRequired();
 
-            builder.HasIndex(x=>x.Description).IsUnique().HasFilter("IsSoftDeleted = 'false'");
+            builder.HasIndex(x => x.Description).IsUnique()/*.HasFilter("IsSoftDeleted = 'false'")*/;
         }
     }
 }

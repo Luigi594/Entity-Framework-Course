@@ -21,7 +21,7 @@
 
         public void UndoSoftDelete()
         {
-            if(IsSoftDeleted) IsSoftDeleted = false;
+            if (IsSoftDeleted) IsSoftDeleted = false;
         }
     }
 }

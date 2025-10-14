@@ -5,14 +5,14 @@ using System.Reflection;
 
 namespace EFCoreCourse
 {
-    public class ApplicationDbContext(DbContextOptions options): DbContext(options)
+    public class ApplicationDbContext(DbContextOptions options) : DbContext(options)
     {
         // If I wanted to have configured certain properties by convention, I would do it here.
         //protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
         //{
         //    configurationBuilder.Properties<DateTime>().HaveColumnType("date");
         //}
-        
+
         #region Table Names
 
         public DbSet<Genres> Genres { get; set; }
@@ -24,6 +24,7 @@ namespace EFCoreCourse
         public DbSet<MoviesActors> MoviesActors { get; set; }
         public DbSet<Person> Person { get; set; }
         public DbSet<Messages> Messages { get; set; }
+        public DbSet<Payment> Payment { get; set; }
 
         #endregion
 
@@ -55,7 +56,7 @@ namespace EFCoreCourse
                     // Configure string properties that contain "Url" in their name
                     foreach (var prop in entityType.GetProperties())
                     {
-                        if(prop.ClrType == typeof(string) &&
+                        if (prop.ClrType == typeof(string) &&
                             prop.Name.Contains("Url", StringComparison.CurrentCultureIgnoreCase))
                         {
                             prop.SetIsUnicode(false);
