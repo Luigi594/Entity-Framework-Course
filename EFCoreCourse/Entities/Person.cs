@@ -1,4 +1,6 @@
-﻿namespace EFCoreCourse.Entities
+﻿using EFCoreCourse.Utils;
+
+namespace EFCoreCourse.Entities
 {
     // Person entity representing an individual with basic details
     // With the Messagess Entity I just want to apply how to handle 2 navigation properties
@@ -27,6 +29,22 @@
         {
             SentMessages = new HashSet<Messages>();
             ReceivedMessages = new HashSet<Messages>();
+        }
+
+        #endregion
+
+        #region Methods
+
+        public static Person Create(string name, string lastName, DateTime birthDate)
+        {
+            return new Person
+            {
+                Id = IdentityGenerator.GenerateNewIdentity(),
+                Name = name,
+                LastName = lastName,
+                BirthDate = birthDate,
+                CreatedAt = DateTime.Now
+            };
         }
 
         #endregion

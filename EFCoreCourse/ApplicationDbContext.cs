@@ -8,11 +8,11 @@ namespace EFCoreCourse
     public class ApplicationDbContext(DbContextOptions options): DbContext(options)
     {
         // If I wanted to have configured certain properties by convention, I would do it here.
-        protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
-        {
-            configurationBuilder.Properties<DateTime>().HaveColumnType("date");
-        }
-
+        //protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
+        //{
+        //    configurationBuilder.Properties<DateTime>().HaveColumnType("date");
+        //}
+        
         #region Table Names
 
         public DbSet<Genres> Genres { get; set; }
@@ -22,6 +22,8 @@ namespace EFCoreCourse
         public DbSet<MovieOffer> MovieOffer { get; set; }
         public DbSet<MovieTheaterRoom> MovieTheaterRoom { get; set; }
         public DbSet<MoviesActors> MoviesActors { get; set; }
+        public DbSet<Person> Person { get; set; }
+        public DbSet<Messages> Messages { get; set; }
 
         #endregion
 
@@ -29,7 +31,8 @@ namespace EFCoreCourse
         {
             base.OnModelCreating(modelBuilder);
 
-            // Global Query Filter for Soft Delete
+            #region Global Filter for Soft Delete
+
             foreach (var entityType in modelBuilder.Model.GetEntityTypes())
             {
                 // If the entity inherits from our base class "Entity"  
@@ -61,6 +64,8 @@ namespace EFCoreCourse
                     }
                 }
             }
+
+            #endregion
 
             // Apply all configurations from the current assembly
             // Identify all classes that implement IEntityTypeConfiguration<T> and apply them here

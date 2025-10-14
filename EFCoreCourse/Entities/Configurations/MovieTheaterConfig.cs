@@ -11,6 +11,10 @@ namespace EFCoreCourse.Entities.Configurations
             builder.Property(prop => prop.Name)
                .HasMaxLength(150)
                .IsRequired();
+
+            //builder.HasOne(x => x.MovieOffer)
+            //    .WithOne()
+            //    .HasForeignKey<MovieOffer>(x => x.MovieTheaterId);
         }
     }
 }
