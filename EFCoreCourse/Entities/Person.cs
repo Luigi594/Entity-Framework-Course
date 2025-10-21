@@ -13,10 +13,9 @@ namespace EFCoreCourse.Entities
 
         #region Properties
 
-        public Guid Id { get; set; }
-        public string Name { get; set; }
-        public string LastName { get; set; }
-        public DateTime BirthDate { get; set; }
+        public string Name { get; protected set; }
+        public string LastName { get; protected set; }
+        public DateTime BirthDate { get; protected set; }
 
         #endregion
 
@@ -35,16 +34,19 @@ namespace EFCoreCourse.Entities
 
         #region Methods
 
+        protected Person(string name, string lastName, DateTime birthDate)
+        {
+            Id = IdentityGenerator.GenerateNewIdentity();
+            Name = name;
+            LastName = lastName;
+            BirthDate = birthDate;
+            CreatedAt = DateTime.Now;
+        }
+
         public static Person Create(string name, string lastName, DateTime birthDate)
         {
-            return new Person
-            {
-                Id = IdentityGenerator.GenerateNewIdentity(),
-                Name = name,
-                LastName = lastName,
-                BirthDate = birthDate,
-                CreatedAt = DateTime.Now
-            };
+            // Calling the protected constructor
+            return new Person(name, lastName, birthDate);
         }
 
         #endregion

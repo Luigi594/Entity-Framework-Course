@@ -7,6 +7,7 @@ namespace EFCoreCourse.Entities
         #region Properties
 
         public string Email { get; set; }
+        public string ReferenceCode { get; set; }
 
         #endregion
 
@@ -14,11 +15,14 @@ namespace EFCoreCourse.Entities
 
         public static PayPalPayment Create(string email, decimal amount)
         {
+            var referenceCode = CodeGenerator.Generate(email);  
+
             return new PayPalPayment
             {
                 Id = IdentityGenerator.GenerateNewIdentity(),
                 Email = email,
                 Amount = amount,
+                ReferenceCode = referenceCode,
                 CreatedAt = DateTime.Now,
             };
         }

@@ -1,0 +1,40 @@
+﻿using EFCoreCourse.Utils;
+
+namespace EFCoreCourse.Entities
+{
+    public class MovieRental: Entity
+    {
+        #region Properties
+
+        public DateTime RentalDate { get; set; }
+        public DateTime? ReturnDate { get; set; }
+
+        #endregion
+
+        #region Foreign Keys
+
+        public Guid RentalTransactionId { get; set; }
+        public RentalTransaction RentalTransaction { get; set; }
+        public Guid MovieId { get; set; }
+        public Movie Movie { get; set; }
+
+        #endregion
+
+        #region Methods
+
+        public static MovieRental Create(Guid rentalTransactionId, Guid movieId)
+        {
+            var movieRental = new MovieRental
+            {
+                Id = IdentityGenerator.GenerateNewIdentity(),
+                RentalDate = DateTime.Now,
+                RentalTransactionId = rentalTransactionId,
+                MovieId = movieId,
+                CreatedAt = DateTime.Now
+            };
+            return movieRental;
+        }
+
+        #endregion
+    }
+}

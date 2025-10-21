@@ -7,8 +7,10 @@ namespace EFCoreCourse.Entities.Configurations
     {
         public void Configure(EntityTypeBuilder<CreditCardPayment> builder)
         {
-            builder.Property(x => x.LastFourDigits).HasColumnType("char(4)").IsRequired();
-            builder.Property(x => x.CardHolderName).HasMaxLength(150);
+            builder.Property(x => x.CardNumber)
+                .HasColumnType("char(4)").IsRequired();
+
+            builder.Property(x => x.CardHolderName).HasMaxLength(150).IsRequired();
         }
     }
 }

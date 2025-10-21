@@ -4,7 +4,6 @@ namespace EFCoreCourse.Entities
 {
     public class Genres: Entity
     {
-        public Guid Id { get; set; }
         public string Description { get; set; }
 
         #region Navs

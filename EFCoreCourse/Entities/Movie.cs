@@ -21,12 +21,14 @@ namespace EFCoreCourse.Entities
         public ICollection<Genres> Genres { get; set; }
         public ICollection<MovieTheaterRoom> MovieTheaterRooms { get; set; }
         public ICollection<MoviesActors> MoviesActors { get; set; }
+        public ICollection<MovieRental> MovieRentals { get; set; }
 
         public Movie()
         {
             Genres = new HashSet<Genres>();
             MovieTheaterRooms = new HashSet<MovieTheaterRoom>();
             MoviesActors = new HashSet<MoviesActors>();
+            MovieRentals = new HashSet<MovieRental>();
         }
 
         #endregion

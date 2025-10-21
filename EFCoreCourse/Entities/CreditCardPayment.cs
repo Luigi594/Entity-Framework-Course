@@ -4,19 +4,21 @@
     {
         #region Properties
 
-        public string LastFourDigits { get; set; }
+        public string CardNumber { get; set; }
         public string CardHolderName { get; set; }
 
         #endregion
 
         #region Methods
 
-        public static CreditCardPayment Create(string lastFourDigits, string cardHolderName)
+        public static CreditCardPayment Create(string lastFourDigits, string cardHolderName, decimal amount)
         {
             return new CreditCardPayment
             {
-                LastFourDigits = lastFourDigits,
-                CardHolderName = cardHolderName
+                CardNumber = lastFourDigits,
+                CardHolderName = cardHolderName,
+                Amount = amount,
+                CreatedAt = DateTime.Now,
             };
         }
 

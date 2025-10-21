@@ -6,7 +6,6 @@ namespace EFCoreCourse.Entities
     {
         #region Properties
 
-        public Guid Id { get; set; }
         public string Text { get; set; }
         public DateTime SentAt { get; set; }
         public Guid SenderId { get; set; }

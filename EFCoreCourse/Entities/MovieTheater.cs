@@ -7,7 +7,6 @@ namespace EFCoreCourse.Entities
     {
         #region Properties
 
-        public Guid Id { get; set; }
         public string Name { get; set; }
         public Point Location { get; set; }
         public MovieOffer MovieOffer { get; set; }

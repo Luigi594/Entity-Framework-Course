@@ -7,18 +7,18 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace EFCoreCourse.Server.Cruds
 {
-    public class PersonCrudController
+    public class CustomerCrudController
     {
         public class Create
         {
-            public class CreateCommand : IRequest<ActionResult<EndpointResponses.ResponseWithSimpleMessage>>
+            public class CreateCustomerCommand : IRequest<ActionResult<EndpointResponses.ResponseWithSimpleMessage>>
             {
                 public string Name { get; set; }
                 public string LastName { get; set; }
                 public DateTime BirthDate { get; set; }
             }
 
-            public class Validator : AbstractValidator<CreateCommand>
+            public class Validator : AbstractValidator<CreateCustomerCommand>
             {
                 public Validator()
                 {
@@ -36,30 +36,32 @@ namespace EFCoreCourse.Server.Cruds
                 }
             }
 
-            public class CreateCommandHandler(ApplicationDbContext context)
-                : IRequestHandler<CreateCommand, ActionResult<EndpointResponses.ResponseWithSimpleMessage>>
+            public class CreateCustomerCommandCommandHandler(ApplicationDbContext context)
+                : IRequestHandler<CreateCustomerCommand, ActionResult<EndpointResponses.ResponseWithSimpleMessage>>
             {
                 private readonly ApplicationDbContext _context = context;
 
-                public async Task<ActionResult<EndpointResponses.ResponseWithSimpleMessage>> Handle(CreateCommand command, CancellationToken cancellationToken)
+                public async Task<ActionResult<EndpointResponses.ResponseWithSimpleMessage>> Handle(CreateCustomerCommand command, CancellationToken cancellationToken)
                 {
-                    var message = "";
+                    string message;
 
-                    if(command.BirthDate > DateTime.Today)
+                    if (command.BirthDate > DateTime.Today)
                     {
                         message = "The BirthDate cannot be in the future.";
                         return EndpointResponses.ResponseWithSimpleMessage
                             .Create(message);
                     }
 
-                    var newPerson = Person.Create(command.Name, command.LastName, command.BirthDate);
-                    await _context.Person.AddAsync(newPerson, cancellationToken);
+                    // I need to generate a unique CustomerCode for the new customer
+                    var customerCode = CodeGenerator.Generate(command.Name, command.LastName);
+
+                    var newCustomer = Customer.Create(command.Name, command.LastName, command.BirthDate, customerCode);
+                    await _context.Person.AddAsync(newCustomer, cancellationToken);
                     await _context.SaveChangesAsync(cancellationToken);
 
-                    message = $"Person: {newPerson.Name} {newPerson.LastName} created successfully.";
+                    message = $"Customer: {newCustomer.Name} {newCustomer.LastName} created successfully.";
 
-                    return EndpointResponses.ResponseWithSimpleMessage
-                        .Create(message);
+                    return EndpointResponses.ResponseWithSimpleMessage.Create(message);
                 }
             }
         }

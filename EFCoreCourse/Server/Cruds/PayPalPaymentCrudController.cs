@@ -27,7 +27,7 @@ namespace EFCoreCourse.Server.Cruds
                 }
             }
 
-            public class CreateGenreCommandHandler(ApplicationDbContext context)
+            public class CreatePayPalPaymentCommandCommandHandler(ApplicationDbContext context)
                 : IRequestHandler<CreatePayPalPaymentCommand, ActionResult<EndpointResponses.ResponseWithSimpleMessage>>
             {
                 private readonly ApplicationDbContext _context = context;
