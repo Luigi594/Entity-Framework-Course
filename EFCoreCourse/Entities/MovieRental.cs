@@ -2,7 +2,7 @@
 
 namespace EFCoreCourse.Entities
 {
-    public class MovieRental: Entity
+    public class MovieRental : Entity
     {
         #region Properties
 
@@ -23,14 +23,15 @@ namespace EFCoreCourse.Entities
 
         #region Methods
 
-        public static MovieRental Create(Guid rentalTransactionId, Guid movieId)
+        public static MovieRental Create(Guid rentalTransactionId, Guid movieId, DateTime rentalDate, decimal rentalPrice)
         {
             var movieRental = new MovieRental
             {
                 Id = IdentityGenerator.GenerateNewIdentity(),
-                RentalDate = DateTime.Now,
+                RentalDate = rentalDate,
                 RentalTransactionId = rentalTransactionId,
                 MovieId = movieId,
+                RentalPrice = rentalPrice,
                 CreatedAt = DateTime.Now
             };
             return movieRental;

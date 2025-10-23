@@ -10,7 +10,7 @@ namespace EFCoreCourse.Controllers
         private readonly IMediator _mediator = mediator;
 
         [HttpPost]
-        public async Task<ActionResult<EndpointResponses.ResponseWithSimpleMessage>> CreateRentMovie([FromBody] MovieRentalCrudController.CreateRentMovie.CreateRentMovieCommand command)
+        public async Task<ActionResult<EndpointResponses.ResponseWithSimpleMessage>> CreateMovieRent([FromBody] MovieRentalCrudController.CreateMovieRent.CreateMovieRentCommand command)
         {
             var response = await _mediator.Send(command);
             return Ok(response);

@@ -11,15 +11,25 @@
 
         #region Methods
 
-        public static CreditCardPayment Create(string lastFourDigits, string cardHolderName, decimal amount)
+        public static CreditCardPayment Create(string cardNumber, string cardHolderName, decimal amount)
         {
             return new CreditCardPayment
             {
-                CardNumber = lastFourDigits,
+                CardNumber = cardNumber,
                 CardHolderName = cardHolderName,
                 Amount = amount,
                 CreatedAt = DateTime.Now,
             };
+        }
+
+        #endregion
+
+        #region DTOs
+
+        public class Vm
+        {
+            public string CardNumber { get; set; }
+            public string CardHolderName { get; set; }
         }
 
         #endregion

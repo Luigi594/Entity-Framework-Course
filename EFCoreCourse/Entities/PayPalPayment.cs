@@ -15,7 +15,7 @@ namespace EFCoreCourse.Entities
 
         public static PayPalPayment Create(string email, decimal amount)
         {
-            var referenceCode = CodeGenerator.Generate(email);  
+            var referenceCode = CodeGenerator.Generate(email);
 
             return new PayPalPayment
             {
@@ -25,6 +25,15 @@ namespace EFCoreCourse.Entities
                 ReferenceCode = referenceCode,
                 CreatedAt = DateTime.Now,
             };
+        }
+
+        #endregion
+
+        #region DTOs
+
+        public class Vm
+        {
+            public string Email { get; set; }
         }
 
         #endregion

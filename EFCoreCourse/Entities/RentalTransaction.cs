@@ -2,7 +2,7 @@
 
 namespace EFCoreCourse.Entities
 {
-    public class RentalTransaction: Entity
+    public class RentalTransaction : Entity
     {
         #region Properties
 
@@ -13,7 +13,7 @@ namespace EFCoreCourse.Entities
         #region Foreign Keys
 
         public Guid CustomerId { get; set; }
-        public Customer Custommer { get; set; }
+        public Customer Customer { get; set; }
         public Guid PaymentId { get; set; }
         public Payment Payment { get; set; }
 
