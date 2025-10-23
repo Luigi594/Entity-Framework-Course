@@ -4,5 +4,6 @@
     {
         PayPal = 1,
         CreditCard = 2,
+        Cash = 3
     }
 }

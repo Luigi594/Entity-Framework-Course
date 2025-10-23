@@ -10,6 +10,8 @@ namespace EFCoreCourse.Entities.Configurations
             builder.Property(x => x.Email).HasMaxLength(150).IsRequired();
 
             builder.HasIndex(x => x.Email).IsUnique();
+
+            builder.Property(x => x.ReferenceCode).HasMaxLength(50).IsRequired();
         }
     }
 }

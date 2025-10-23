@@ -25,6 +25,8 @@ namespace EFCoreCourse
         public DbSet<Person> Person { get; set; }
         public DbSet<Messages> Messages { get; set; }
         public DbSet<Payment> Payment { get; set; }
+        public DbSet<MovieRental> MovieRental { get; set; }
+        public DbSet<RentalTransaction> RentalTransaction { get; set; }
 
         #endregion
 
@@ -37,7 +39,7 @@ namespace EFCoreCourse
             foreach (var entityType in modelBuilder.Model.GetEntityTypes())
             {
                 // If the entity inherits from our base class "Entity"  
-                if (typeof(Entity).IsAssignableFrom(entityType.ClrType))
+                if (typeof(Entity).IsAssignableFrom(entityType.ClrType) && entityType.BaseType == null)
                 {
                     // Create the parameter for the lambda expression (e.g., "e") 
                     // of the correct type (e.g., Actors, Genres, etc.) 

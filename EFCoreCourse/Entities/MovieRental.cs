@@ -8,6 +8,7 @@ namespace EFCoreCourse.Entities
 
         public DateTime RentalDate { get; set; }
         public DateTime? ReturnDate { get; set; }
+        public decimal RentalPrice { get; set; }
 
         #endregion
 
