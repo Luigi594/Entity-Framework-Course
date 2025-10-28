@@ -10,7 +10,7 @@
 
         #endregion
 
-        #region 
+        #region Methods
 
         public static CashPayment Create(string receivedBy, decimal amount)
         {

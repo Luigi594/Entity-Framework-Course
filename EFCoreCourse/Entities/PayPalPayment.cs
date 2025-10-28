@@ -15,6 +15,11 @@ namespace EFCoreCourse.Entities
 
         public static PayPalPayment Create(string email, decimal amount)
         {
+            if (!EmailValidator.IsValidEmail(email))
+                throw new ArgumentException("The Email is not valid!");
+
+            ValidateAmount(amount);
+
             var referenceCode = CodeGenerator.Generate(email);
 
             return new PayPalPayment

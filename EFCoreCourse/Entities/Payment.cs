@@ -8,5 +8,15 @@
         public decimal Amount { get; set; }
 
         #endregion
+
+        #region  Methods
+        
+        protected static void ValidateAmount(decimal amount)
+        {
+            if (amount <= 0)
+                throw new ArgumentException("Payment amount must be greater than zero.");
+        }
+
+        #endregion
     }
 }

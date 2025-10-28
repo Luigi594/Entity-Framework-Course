@@ -77,7 +77,7 @@ namespace EFCoreCourse.Server.Cruds
                             ?? throw new Exception($"Movie with Id {movie.Id} was not found.");
                     }
 
-                    if (!Enum.IsDefined(typeof(PaymentType), command.Payment.PaymentType))
+                    if (!Enum.IsDefined(command.Payment.PaymentType))
                         throw new Exception($"Invalid payment type.");
 
                     if (command.MovieRentals.Count == 0)
