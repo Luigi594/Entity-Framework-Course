@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace EFCoreCourse.Controllers
 {
+    [ApiController]
+    [Route("Api/MovieRental/[Action]")]
     public class MovieRentalController(IMediator mediator) : Controller
     {
         private readonly IMediator _mediator = mediator;

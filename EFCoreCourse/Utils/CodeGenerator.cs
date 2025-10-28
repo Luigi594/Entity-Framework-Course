@@ -9,7 +9,7 @@ namespace EFCoreCourse.Utils
 
         private const int MIN_NUMBER = 100000;
         private const int MAX_NUMBER = 999999;
-        private const int LETTER_COUNT = 3;
+        private const int LETTER_COUNT = 2;
 
         public static string Generate()
         {
@@ -22,7 +22,7 @@ namespace EFCoreCourse.Utils
 
         public static string Generate(string name, string lastName)
         {
-            if(string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(lastName))
+            if (string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(lastName))
             {
                 throw new ArgumentException("Name and LastName must be provided.");
             }
@@ -61,23 +61,26 @@ namespace EFCoreCourse.Utils
                 throw new ArgumentException("Email username must be at least 3 characters long.");
             }
 
-            // Take 3 random letters from the username
-            StringBuilder codeBuilder = new();
+            // Take 2 random letters from the username
+            string letters;
+            int number;
 
             lock (_lock)
             {
+                StringBuilder letterBuilder = new();
+
                 for (int i = 0; i < LETTER_COUNT; i++)
                 {
                     int index = _random.Next(username.Length);
-                    char letter = char.ToLower(username[index]);
-                    codeBuilder.Append(letter);
+                    char letter = char.ToUpper(username[index]);
+                    letterBuilder.Append(letter);
                 }
 
-                int number = _random.Next(MIN_NUMBER, MAX_NUMBER + 1);
-                codeBuilder.Append(number);
+                letters = letterBuilder.ToString();
+                number = _random.Next(MIN_NUMBER, MAX_NUMBER + 1);
             }
 
-            return codeBuilder.ToString();
+            return $"{letters}-{number}";
         }
     }
 }

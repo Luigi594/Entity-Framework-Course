@@ -1,6 +1,8 @@
-﻿namespace EFCoreCourse.Entities
+﻿using EFCoreCourse.Utils;
+
+namespace EFCoreCourse.Entities
 {
-    public class MoviesActors: Entity
+    public class MoviesActors : Entity
     {
         #region Properties
 
@@ -16,9 +18,10 @@
         #region Methods
 
         public static MoviesActors Create(Guid movieId, Guid actorId, string character, int order)
-        {   
+        {
             return new MoviesActors
             {
+                Id = IdentityGenerator.GenerateNewIdentity(),
                 MovieId = movieId,
                 ActorId = actorId,
                 Character = character,

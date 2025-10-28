@@ -156,6 +156,7 @@ namespace EFCoreCourse.Server.Cruds
                             }
 
                             newMovieOffer.MovieTheaterId = newMovieTheater.Id;
+                            newMovieTheater.MovieOffer = newMovieOffer;
 
                             await _context.MovieTheater.AddAsync(newMovieTheater, cancellationToken);
                             await _context.SaveChangesAsync(cancellationToken);

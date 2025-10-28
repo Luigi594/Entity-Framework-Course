@@ -42,6 +42,10 @@ builder.Services.AddSwaggerGen(c =>
             Title = "EFCoreCourse API",
             Version = "v1"
         });
+
+        c.CustomSchemaIds(type =>
+            type.FullName?.Replace("+", ".")
+        );
     }
 );
 

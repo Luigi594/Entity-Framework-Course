@@ -1,6 +1,7 @@
 ﻿using EFCoreCourse.Entities;
 using EFCoreCourse.Entities.Enums;
 using EFCoreCourse.Server.Utilities;
+using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -35,6 +36,24 @@ namespace EFCoreCourse.Server.Cruds
                 }
             }
 
+            public class Validator : AbstractValidator<CreateMovieRentCommand>
+            {
+                public Validator()
+                {
+                    RuleFor(x => x.Payment.Amount).NotEmpty().WithMessage("Amount is required");
+
+                    //RuleFor(x => x.Payment.CreditCard.CardNumber)
+                    //    .MaximumLength(4).WithMessage("Card Number must be at least 4 digits");
+
+                    //RuleFor(x => x.Payment.CreditCard.CardHolderName)
+                    //    .MaximumLength(100).WithMessage("Card holder name must not exceed 100 characters.");
+
+                    //RuleFor(x => x.Payment.PayPal.Email)
+                    //    .Must(EmailValidator.IsValidEmail).WithMessage("The Email is not valid!");
+
+                }
+            }
+
             public class CreateMovieRentCommandHandler(ApplicationDbContext context)
                 : IRequestHandler<CreateMovieRentCommand, ActionResult<EndpointResponses.ResponseWithSimpleMessage>>
             {
@@ -58,7 +77,7 @@ namespace EFCoreCourse.Server.Cruds
                             ?? throw new Exception($"Movie with Id {movie.Id} was not found.");
                     }
 
-                    if (!Enum.IsDefined(typeof(PaymentType), command.Payment))
+                    if (!Enum.IsDefined(typeof(PaymentType), command.Payment.PaymentType))
                         throw new Exception($"Invalid payment type.");
 
                     if (command.MovieRentals.Count == 0)
@@ -89,9 +108,9 @@ namespace EFCoreCourse.Server.Cruds
 
                             if (command.Payment.Cash.ChangeGiven)
                             {
-                                if (command.Payment.Amount != totalRentalPrice)
+                                if (command.Payment.Amount < totalRentalPrice)
                                 {
-                                    throw new Exception($@"The amount received cannot be less or more than the total income.
+                                    throw new Exception($@"The amount received cannot be less than the total income.
                                     The total amount is: {totalRentalPrice} and the user is paying: {command.Payment.Amount}.");
                                 }
 
@@ -105,7 +124,6 @@ namespace EFCoreCourse.Server.Cruds
 
 
                         case PaymentType.CreditCard:
-                            // create the Validator before the handler to validate the cardNuber and cardHolderName
 
                             var newPaymentCreditCard = CreditCardPayment.Create(command.Payment.CreditCard.CardNumber, command.Payment.CreditCard.CardHolderName, totalRentalPrice);
                             payment = newPaymentCreditCard;
