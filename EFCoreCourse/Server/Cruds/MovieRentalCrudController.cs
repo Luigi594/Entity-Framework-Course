@@ -5,6 +5,8 @@ using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace EFCoreCourse.Server.Cruds
 {
@@ -75,6 +77,12 @@ namespace EFCoreCourse.Server.Cruds
                         var movie = movies.ElementAt(i);
                         var existe = movies.Where(x => x.Id == movie.Id).FirstOrDefault()
                             ?? throw new Exception($"Movie with Id {movie.Id} was not found.");
+
+                        if (!movie.IsAvailableForRental)
+                            throw new Exception($"Movie '{movie.Title}' is not available for rental.");
+
+                        if (movie.AvailableCopies <= 0)
+                            throw new Exception($"Movie '{movie.Title}' does not have available copies for rental.");
                     }
 
                     if (!Enum.IsDefined(command.Payment.PaymentType))
@@ -140,12 +148,28 @@ namespace EFCoreCourse.Server.Cruds
                             throw new Exception("Payment type not supported.");
                     }
 
+                    await _context.Payment.AddAsync(payment, cancellationToken);
+
                     #endregion
 
                     var newRentalTransaction = RentalTransaction.Create(customer.Id, payment.Id);
 
+                    await _context.AddAsync(newRentalTransaction, cancellationToken);
+
                     foreach (var rentalVm in command.MovieRentals)
                     {
+                        var movie = movies.Where(x => x.Id == rentalVm.MovieId).FirstOrDefault()
+                            ?? throw new Exception($"Movie with Id {rentalVm.MovieId} was not found.");
+
+                        if (movie.AvailableCopies == 0)
+                        {
+                            movie.IsAvailableForRental = false;
+                            throw new Exception($"We apologize, but the movie {movie.Title} is no longer available.");
+                        }
+
+                        // Reduce available copies
+                        movie.AvailableCopies--;
+
                         var newMovieRental = MovieRental.Create(newRentalTransaction.Id, rentalVm.MovieId,
                             rentalVm.RentalDate, rentalVm.RentalPrice);
 
@@ -159,18 +183,35 @@ namespace EFCoreCourse.Server.Cruds
 
                     try
                     {
-                        _context.Payment.Add(payment);
-                        _context.RentalTransaction.Add(newRentalTransaction);
                         await _context.SaveChangesAsync(cancellationToken);
                         await transaction.CommitAsync(cancellationToken);
 
                         return EndpointResponses.ResponseWithSimpleMessage
                             .Create($"Your purchase was successful with reference: {newRentalTransaction.ReferenceCode}");
                     }
-                    catch (Exception ex)
+                    catch (DbUpdateConcurrencyException ex)
                     {
                         await transaction.RollbackAsync(cancellationToken);
-                        throw new Exception($"Error during operation: {ex.Message}");
+
+                        var failedEntry = ex.Entries.FirstOrDefault();
+
+                        // We say that tha failed entry is Movie because it has the AvailableCopies property
+                        // that can be updated by multiple users at the same time
+                        // For example, two users trying to rent the last available copy of a movie
+                        // If that fails we revert the transaction and notify the user
+                        if (failedEntry?.Entity is Movie failedMovie)
+                        {
+                            throw new Exception($"The movie '{failedMovie.Title}' was just rented by another user. " +
+                                $"Please review the available copies and try again.");
+                        }
+
+                        throw new Exception("Unexpected concurrency error.The data was modified by another user. " +
+                            "The transaction has been canceled.");
+                    }
+                    catch (Exception)
+                    {
+                        await transaction.RollbackAsync(cancellationToken);
+                        throw;
                     }
                 }
             }

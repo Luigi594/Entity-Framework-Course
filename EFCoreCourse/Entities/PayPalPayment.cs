@@ -13,23 +13,18 @@ namespace EFCoreCourse.Entities
 
         #region Methods
 
+        private PayPalPayment(string email, decimal amount): base(amount)
+        {
+            Email = email;
+            ReferenceCode = CodeGenerator.Generate(email);
+        }
+
         public static PayPalPayment Create(string email, decimal amount)
         {
             if (!EmailValidator.IsValidEmail(email))
                 throw new ArgumentException("The Email is not valid!");
 
-            ValidateAmount(amount);
-
-            var referenceCode = CodeGenerator.Generate(email);
-
-            return new PayPalPayment
-            {
-                Id = IdentityGenerator.GenerateNewIdentity(),
-                Email = email,
-                Amount = amount,
-                ReferenceCode = referenceCode,
-                CreatedAt = DateTime.Now,
-            };
+            return new PayPalPayment(email, amount);
         }
 
         #endregion

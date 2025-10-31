@@ -12,6 +12,9 @@ namespace EFCoreCourse.Entities
         public DateTime ReleaseDate { get; set; }
         public bool IsOnDisplay { get; set; }
         public string PosterUrl { get; set; }
+        public int TotalCopies { get; set; }
+        public int AvailableCopies { get; set; }
+        public bool IsAvailableForRental { get; set; }
 
         #endregion
 

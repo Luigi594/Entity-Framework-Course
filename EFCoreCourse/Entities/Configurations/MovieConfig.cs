@@ -18,6 +18,13 @@ namespace EFCoreCourse.Entities.Configurations
             builder.Property(prop => prop.PosterUrl)
                 .HasMaxLength(500)
                 .IsUnicode(false); // Non-Unicode string (VARCHAR)
+
+            builder.Property(x => x.TotalCopies);
+            builder.Property(x => x.AvailableCopies);
+
+            builder.Property(x => x.IsAvailableForRental)
+                .HasDefaultValue(false);
+
         }
     }
 }

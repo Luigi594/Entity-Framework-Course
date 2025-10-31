@@ -19,7 +19,7 @@ namespace EFCoreCourse.Entities
 
         #region Methods
 
-        protected Customer(string name, string lastname, DateTime birthDate, string customerCode)
+        private Customer(string name, string lastname, DateTime birthDate, string customerCode)
             : base(name, lastname, birthDate)
         {
             // This constructor would only care about setting the CustomerCode property

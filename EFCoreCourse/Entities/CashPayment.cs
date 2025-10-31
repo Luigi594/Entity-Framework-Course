@@ -14,15 +14,14 @@ namespace EFCoreCourse.Entities
 
         #region Methods
 
+        private CashPayment(string receivedBy, decimal amount): base(amount)
+        {
+            ReceivedBy = receivedBy ?? "";
+        }
+
         public static CashPayment Create(string receivedBy, decimal amount)
         {
-            return new CashPayment
-            {
-                Id = IdentityGenerator.GenerateNewIdentity(),
-                ReceivedBy = receivedBy ?? "",
-                Amount = amount,
-                CreatedAt = DateTime.Now,
-            };
+            return new CashPayment(receivedBy, amount);
         }
 
         #endregion

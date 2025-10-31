@@ -13,22 +13,20 @@ namespace EFCoreCourse.Entities
 
         #region Methods
 
+        private CreditCardPayment(string cardNumber, string cardHolderName, decimal amount)
+            : base(amount)
+        {
+            CardNumber = cardNumber;
+            CardHolderName = cardHolderName;
+        }
+
         public static CreditCardPayment Create(string cardNumber, string cardHolderName, decimal amount)
         {
             ValidateCardNumber(cardNumber);
             ValidateCardHolderName(cardHolderName);
             ValidateAmount(amount);
 
-            // It should bring the Id and Amount from the parent clase, from the base constructor
-            // I'll fix this later, the same thing for PayPal and Cash class
-            return new CreditCardPayment
-            {
-                Id = IdentityGenerator.GenerateNewIdentity(),
-                CardNumber = cardNumber,
-                CardHolderName = cardHolderName,
-                Amount = amount,
-                CreatedAt = DateTime.Now,
-            };
+            return new CreditCardPayment(cardNumber, cardHolderName, amount);
         }
 
         private static void ValidateCardNumber(string cardNumber)

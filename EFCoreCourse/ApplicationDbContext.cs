@@ -65,6 +65,11 @@ namespace EFCoreCourse
                             prop.SetMaxLength(500);
                         }
                     }
+
+                    // Configure the RowVersion property for concurrency
+                    modelBuilder.Entity(entityType.Name)
+                        .Property(nameof(Entity.RowVersion))
+                        .IsRowVersion();
                 }
             }
 
