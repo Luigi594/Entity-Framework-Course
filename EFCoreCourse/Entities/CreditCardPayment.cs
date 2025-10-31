@@ -1,4 +1,6 @@
-﻿namespace EFCoreCourse.Entities
+﻿using EFCoreCourse.Utils;
+
+namespace EFCoreCourse.Entities
 {
     public class CreditCardPayment : Payment
     {
@@ -13,8 +15,11 @@
 
         public static CreditCardPayment Create(string cardNumber, string cardHolderName, decimal amount)
         {
+            // It should bring the Id and Amount from the parent clase, from the base constructor
+            // I'll fix this later, the same thing for PayPal and Cash class
             return new CreditCardPayment
             {
+                Id = IdentityGenerator.GenerateNewIdentity(),
                 CardNumber = cardNumber,
                 CardHolderName = cardHolderName,
                 Amount = amount,

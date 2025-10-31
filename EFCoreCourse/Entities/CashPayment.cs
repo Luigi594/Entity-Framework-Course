@@ -1,4 +1,6 @@
-﻿namespace EFCoreCourse.Entities
+﻿using EFCoreCourse.Utils;
+
+namespace EFCoreCourse.Entities
 {
     public class CashPayment : Payment
     {
@@ -16,6 +18,7 @@
         {
             return new CashPayment
             {
+                Id = IdentityGenerator.GenerateNewIdentity(),
                 ReceivedBy = receivedBy ?? "",
                 Amount = amount,
                 CreatedAt = DateTime.Now,

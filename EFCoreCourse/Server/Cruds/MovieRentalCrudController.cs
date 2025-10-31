@@ -93,7 +93,7 @@ namespace EFCoreCourse.Server.Cruds
                     }
 
                     var totalRentalPrice = command.MovieRentals.Sum(x => x.RentalPrice);
-                    if (command.Payment.Amount != totalRentalPrice)
+                    if (command.Payment.Amount < totalRentalPrice)
                         throw new Exception($"Total amount {command.Payment.Amount} does not match the total rental price: {totalRentalPrice}.");
 
                     #endregion
