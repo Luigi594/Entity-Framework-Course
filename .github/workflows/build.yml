@@ -9,7 +9,7 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - name: Checkout del código
-              uses: action/checkout@v4
+              uses: actions/checkout@v4
 
             - name: Login en Docker Hub
               uses: docker/login-action@v3
