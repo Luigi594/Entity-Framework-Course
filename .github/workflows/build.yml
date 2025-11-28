@@ -23,7 +23,7 @@ jobs:
                 context: .
                 file: EFCoreCourse/Docker/Dockerfile
                 push: true
-                tags: ${{ secrets.DOCKERHUB_USERNAME }}/efcorecourse-api:latest
+                tags: ${{ secrets.DOCKERHUB_USERNAME }}/efcore-api:latest
 
             - name: Avisar a Render (Deploy)
               run: curl ${{ secrets.RENDER_DEPLOY_HOOK }}
