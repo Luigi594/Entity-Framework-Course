@@ -20,8 +20,15 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+
+// For SQL Server
+//builder.Services.AddDbContext<ApplicationDbContext>(options =>
+//    options.UseSqlServer(connectionString, sqlServer => sqlServer.UseNetTopologySuite())
+//);
+
+// For PostgreSQL
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(connectionString, sqlServer => sqlServer.UseNetTopologySuite())
+    options.UseNpgsql(connectionString, npgsqlOptions => npgsqlOptions.UseNetTopologySuite())
 );
 
 // MediatR
@@ -57,19 +64,16 @@ builder.Services.AddAutoMapper(cfg => { }, typeof(Program));
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+// app.MapOpenApi();
+
+app.UseSwagger();
+
+app.UseSwaggerUI(c =>
 {
-    // app.MapOpenApi();
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "EFCoreCourse API v1");
+    c.RoutePrefix = string.Empty;
+});
 
-    app.UseSwagger();
-
-    app.UseSwaggerUI(c =>
-    {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "EFCoreCourse API v1");
-        c.RoutePrefix = string.Empty;
-    });
-}
 
 app.UseHttpsRedirection();
 

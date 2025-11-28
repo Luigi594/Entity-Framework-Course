@@ -3,8 +3,11 @@ FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 
 WORKDIR /src
 
+COPY ["EFCoreCourse.sln", "."]
+
 # Copy csproj content 
 COPY ["EFCoreCourse/EFCoreCourse.csproj", "EFCoreCourse/"]
+
 RUN dotnet restore "EFCoreCourse/EFCoreCourse.csproj"
 
 # Copy everything else and build
