@@ -67,9 +67,35 @@ namespace EFCoreCourse
                     }
 
                     // Configure the RowVersion property for concurrency
-                    modelBuilder.Entity(entityType.Name)
-                        .Property(nameof(Entity.RowVersion))
-                        .IsRowVersion();
+
+                    #region This only works using SQL Server
+
+                    //modelBuilder.Entity(entityType.Name)
+                    //   .Property(nameof(Entity.RowVersion))
+                    //   .IsRowVersion();
+
+                    #endregion
+
+                    #region For PostgreSQL is not the same thing, we need to do some changes...
+
+                    var provider = this.Database.ProviderName;
+
+                    // I didn't want to install the package just for .IsSqlServer()
+                    if (provider == "Microsoft.EntityFrameworkCore.SqlServer")
+                    {
+                        modelBuilder.Entity(entityType.Name)
+                           .Property(nameof(Entity.RowVersion))
+                           .IsRowVersion();
+                    }
+                    else if (provider == "Npgsql.EntityFrameworkCore.PostgreSQL")
+                    {
+                        var propBuilder = modelBuilder.Entity(entityType.ClrType)
+                            .Property(nameof(Entity.RowVersion));
+
+                        propBuilder.IsConcurrencyToken();
+                    }
+
+                    #endregion
                 }
             }
 
